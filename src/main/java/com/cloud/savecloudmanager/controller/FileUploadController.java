@@ -23,7 +23,7 @@ public class FileUploadController {
     public ResponseEntity<List<String>> getListOfFiles() {
         return new ResponseEntity<>(service.listFiles(), HttpStatus.OK);
     }
-
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/file/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("fileName") String fileName,
                                              @RequestParam("file") MultipartFile file) {
