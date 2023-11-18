@@ -11,8 +11,8 @@ cloud:
     stack:
       auto: false
     credentials:
-      accessKey: ${{secrets.AWS_ACCESSKEY}}
-      secretKey: ${{secrets.AWS_SECRETKEY}}
+      accessKey: AKIAYQ6HBCMECTTAC6US
+      secretKey: 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
 
 application:
   bucket:
