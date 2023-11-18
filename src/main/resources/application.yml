@@ -1,0 +1,26 @@
+#Application properties
+server:
+  port: 8081
+
+
+#AWS properties
+cloud:
+  aws:
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+    credentials:
+      accessKey: AKIAYQ6HBCMECTTAC6US
+      secretKey: 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
+
+application:
+  bucket:
+    name: cloudsavemanager
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
