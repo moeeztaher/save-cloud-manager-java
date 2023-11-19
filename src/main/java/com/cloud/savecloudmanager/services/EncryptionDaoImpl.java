@@ -1,8 +1,9 @@
 package com.cloud.savecloudmanager.services;
 
+import com.cloud.savecloudmanager.controller.KmsEncryptionController;
+import com.cloud.savecloudmanager.dao.EncryptionDao;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kms.AWSKMS;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
 import com.amazonaws.services.kms.model.*;
@@ -11,8 +12,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -24,7 +27,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
-public class FileEncryptionService {
+public class EncryptionDaoImpl implements EncryptionDao{
 
     @Value("${application.bucket.name}")
     private String bucketName;
@@ -38,6 +41,9 @@ public class FileEncryptionService {
 
     @Value("${cloud.aws.region.static}")
     private String region;
+
+    private static final Logger logger = LoggerFactory.getLogger(EncryptionDaoImpl.class);
+
 
     public byte[] encryptFile(byte[] fileContent) {
 
@@ -79,7 +85,7 @@ public class FileEncryptionService {
         return result;
     }
 
-    public void uploadEncryptedFileToS3(byte[] encryptedFile, String fileName) {
+    public void uploadEncryptedFile(byte[] encryptedFile, String fileName) {
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsId, awsKey)))
                 .withRegion(region)
@@ -87,13 +93,9 @@ public class FileEncryptionService {
 
         String base64EncodedCiphertext = Base64.getEncoder().encodeToString(encryptedFile);
         s3Client.putObject(bucketName, fileName, base64EncodedCiphertext);
-//        s3Client.putObject(bucketName, fileName, Arrays.toString(encryptedFile));
-
-        // Optionally, you might want to store metadata or other information in S3
-        // s3Client.putObjectMetadata(bucketName, fileName, metadata);
     }
 
-    public ByteArrayOutputStream downloadDecryptedFileFromS3(String fileName) {
+    public ByteArrayOutputStream downloadDecryptedFile(String fileName) {
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsId, awsKey)))
                 .withRegion(region)
@@ -114,7 +116,7 @@ public class FileEncryptionService {
             return outputStream;
         } catch (IOException e) {
             // Handle the exception appropriately
-            e.printStackTrace();
+            logger.error("An error occurred in the downloadDecryptedFile method", e);
         }
 
         return null;
@@ -138,7 +140,7 @@ public class FileEncryptionService {
         return outputStream.toByteArray();
     }
 
-    private byte[] decryptFile(byte[] encryptedFile) {
+    byte[] decryptFile(byte[] encryptedFile) {
         AWSKMS kmsClient = AWSKMSClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsId, awsKey)))
                 .withRegion(region)
@@ -161,7 +163,7 @@ public class FileEncryptionService {
                 plaintextChunks.add(decryptedChunk);
             } catch (InvalidCiphertextException e) {
                 // Handle the exception, log it, and consider the ciphertext invalid.
-                e.printStackTrace();
+                logger.error("An error occurred in the decryptFile method", e);
             }
         }
 
