@@ -1,9 +1,5 @@
-#Application properties
 server:
   port: 8081
-
-
-#AWS properties
 cloud:
   aws:
     region:
@@ -13,11 +9,10 @@ cloud:
     credentials:
       accessKey: AKIAYQ6HBCMECTTAC6US
       secretKey: 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
-
+      kms: 9755f95f-27bd-45f7-9985-728115eacca4
 application:
   bucket:
     name: cloudsavemanager
-
 logging:
   level:
     com:

@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class S3Service {
 
-    private Logger logger = LoggerFactory.getLogger(S3Service.class);
+    private final Logger logger = LoggerFactory.getLogger(S3Service.class);
     private TransferManager tfm = new TransferManager();
 
     @Autowired

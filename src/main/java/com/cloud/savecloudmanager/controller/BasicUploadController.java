@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-public class FileUploadController {
+public class BasicUploadController {
 
     @Autowired
     S3Service service;
