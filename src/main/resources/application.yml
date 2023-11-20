@@ -7,8 +7,8 @@ cloud:
     stack:
       auto: false
     credentials:
-      accessKey: AKIAYQ6HBCMECTTAC6US
-      secretKey: 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
+      accessKey: AKIAYQ6HBCMEANJFFIIT
+      secretKey: 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
       kms: 9755f95f-27bd-45f7-9985-728115eacca4
 application:
   bucket:
