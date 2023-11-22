@@ -1,5 +1,15 @@
 server:
   port: 8081
+spring:
+  datasource:
+    username: admin
+    password: root1234
+    url: jdbc:mysql://database-1.cq0llxguqgh1.us-east-1.rds.amazonaws.com:3306/database-1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 cloud:
   aws:
     region:

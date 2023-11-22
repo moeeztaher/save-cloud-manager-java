@@ -21,7 +21,6 @@ public class KmsEncryptionController {
 
     private final EncryptionDao encryptionDao;
     private final EncryptionDaoImpl encryptionDaoImpl;
-    private final S3Service s3Service;
 
     @Autowired
     public KmsEncryptionController(
@@ -30,7 +29,6 @@ public class KmsEncryptionController {
             S3Service s3Service) {
         this.encryptionDao = encryptionDao;
         this.encryptionDaoImpl = encryptionDaoImpl;
-        this.s3Service = s3Service;
     }
     private static final Logger logger = LoggerFactory.getLogger(KmsEncryptionController.class);
 

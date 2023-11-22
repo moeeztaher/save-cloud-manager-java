@@ -41,10 +41,8 @@ public class S3ControllerTest {
 
     @Test
     public void testUploadFile() {
-        // Mock the behavior of s3Dao.uploadFile
         when(s3Dao.uploadFile(anyString(), any(MultipartFile.class))).thenReturn("File uploaded successfully");
 
-        // Create a mock MultipartFile
         MultipartFile mockFile = mock(MultipartFile.class);
 
         ResponseEntity<String> response = controller.uploadFile("file.txt", mockFile);

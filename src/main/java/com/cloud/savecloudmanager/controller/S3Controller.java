@@ -24,7 +24,7 @@ public class S3Controller {
     S3Dao s3Dao;
 
     private static final Logger logger = LoggerFactory.getLogger(S3Controller.class);
-
+    @CrossOrigin(origins = "*")
     @GetMapping("/list/files")
     public ResponseEntity<List<String>> getListOfFiles() {
         try {
@@ -80,6 +80,7 @@ public class S3Controller {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping(value = "/download/{filename}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable String filename) {
         try {
@@ -87,7 +88,7 @@ public class S3Controller {
 
             return ResponseEntity.ok()
                     .contentType(contentType(filename))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                    .header("contentType", String.valueOf(contentType(filename)),HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                     .body(downloadInputStream.toByteArray());
         } catch (Exception e) {
             
@@ -114,21 +115,18 @@ public class S3Controller {
         try {
             String[] fileArrSplit = filename.split("\\.");
             String fileExtension = fileArrSplit[fileArrSplit.length - 1];
-            switch (fileExtension) {
-                case "txt":
-                    return MediaType.TEXT_PLAIN;
-                case "png":
-                    return MediaType.IMAGE_PNG;
-                case "jpg":
-                    return MediaType.IMAGE_JPEG;
-                default:
-                    return MediaType.APPLICATION_OCTET_STREAM;
-            }
+            return switch (fileExtension) {
+                case "txt", "log" -> MediaType.TEXT_PLAIN;
+                case "png" -> MediaType.IMAGE_PNG;
+                case "pdf" -> MediaType.APPLICATION_PDF;
+                case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
+                case "mp4" -> MediaType.valueOf("video/mp4");
+                default -> MediaType.APPLICATION_OCTET_STREAM;
+            };
         } catch (Exception e) {
             
             logger.error("An error occurred in the contentType method", e);
 
-            // Return a default content type in case of an exception
             return MediaType.APPLICATION_OCTET_STREAM;
         }
     }
