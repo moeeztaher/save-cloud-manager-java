@@ -87,6 +87,7 @@ aws.secretKey=your_secret_access_key
 aws.region=your_aws_region
 s3.bucket.name=your_s3_bucket_name
 kms.key.id=your_kms_key_id
+```
 Contributing
 Contributions are welcome! Please follow these steps to contribute:
 
@@ -95,5 +96,3 @@ Create a new branch (git checkout -b feature/your-feature).
 Commit your changes (git commit -m 'Add some feature').
 Push to the branch (git push origin feature/your-feature).
 Create a new Pull Request.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
